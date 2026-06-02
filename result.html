@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Plan — NutriPath</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <nav>
+    <div class="logo">Nutri<span>Path</span></div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/diet_plan">History</a></li>
+    </ul>
+  </nav>
+  <div class="page-header">
+    <h1>Hello, <em>{{ name }}</em></h1>
+    <p>Here is your personalised nutrition blueprint based on your stats and goal.</p>
+  </div>
+  <section class="result-section">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">BMI</div>
+        <div class="stat-val">{{ bmi }}</div>
+        <div class="stat-sub">{{ category }}</div>
+        <div class="bmi-bar-wrap">
+          <div class="bmi-bar">
+            <div class="bmi-needle" id="bmi-needle"></div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Daily Calories</div>
+        <div class="stat-val">{{ calories }}</div>
+        <div class="stat-sub">kcal / day</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Profile</div>
+        <div class="stat-val" style="font-size:1.5rem;margin-top:.6rem;">{{ weight }} kg</div>
+        <div class="stat-sub">{{ height }} cm · {{ age }} yrs · {{ gender }}</div>
+      </div>
+    </div>
+    <div class="plan-header">
+      <h2>{{ plan.title }}</h2>
+      <p>{{ plan.description }}</p>
+      <span class="calorie-badge">Target: {{ calories }} kcal/day</span>
+    </div>
+    <div class="meals-grid">
+      {% for meal in plan.meals %}
+      <div class="meal-card">
+        <div class="meal-time">{{ loop.index }}. {{ meal.name }}</div>
+        <ul class="meal-items">
+          {% for item in meal['items'] %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="tips-card">
+      <h3>Expert Tips</h3>
+      <ul class="tips-list">
+        {% for tip in plan.tips %}
+        <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="btn-row" style="margin-top:2.5rem;">
+      <a href="/" class="btn btn-outline">New Plan</a>
+      <a href="/diet_plan" class="btn">View History</a>
+    </div>
+  </section>
+  <script>
+    const bmi = parseFloat("{{ bmi }}") || 22.5;
+    const pct = Math.min(100, Math.max(0, (bmi - 15) / (40 - 15) * 100));
+    document.getElementById('bmi-needle').style.left = pct + '%';
+  </script>
+</body>
+</html>

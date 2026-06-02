@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History — NutriPath</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <nav>
+    <div class="logo">Nutri<span>Path</span></div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/diet_plan">History</a></li>
+    </ul>
+  </nav>
+  <section class="log-section">
+    <h1>Plan History</h1>
+    {% if logs %}
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Age</th><th>Weight</th><th>Height</th>
+            <th>BMI</th><th>Goal</th><th>Calories</th><th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr>
+            <td>{{ log.name }}</td>
+            <td>{{ log.age }} yrs</td>
+            <td>{{ log.weight }} kg</td>
+            <td>{{ log.height }} cm</td>
+            <td>{{ log.bmi }}</td>
+            <td>
+              <span class="badge badge-{{ log.goal }}">
+                {% if log.goal == 'lose' %}Lose
+                {% elif log.goal == 'gain' %}Gain
+                {% else %}Maintain{% endif %}
+              </span>
+            </td>
+            <td>{{ log.calories }} kcal</td>
+            <td style="color:var(--muted);font-size:.82rem;">{{ log.created }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <p style="font-size:2rem;">🥗</p>
+      <p>No plans generated yet.</p>
+      <a href="/" class="btn" style="display:inline-block;margin-top:1.5rem;">Generate First Plan</a>
+    </div>
+    {% endif %}
+    <div class="btn-row" style="margin-top:2rem;">
+      <a href="/" class="btn btn-outline">Back to Planner</a>
+    </div>
+  </section>
+</body>
+</html>
